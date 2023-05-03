@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List of users</title>
+</head>
+<body>
+    <table>
+        <thead>
+        <tr>
+            <th> Id </th>
+            <th> Email </th>
+            <th> Username </th>
+            <th> Role </th>
+            <th> Make admin </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${people.isEmpty()}">
+            <td colspan="2"> No Users Available </td>
+        </tr>
+        <tr th:each="person : ${people}">
+            <td><span th:text="${person.getId()}"> Id </span></td>
+            <td><span th:text="${person.getEmail()}"> Email </span></td>
+            <td><span th:text="${person.getUsername()}"> Username </span></td>
+            <td><span th:text="${person.getRole()}"> Role </span></td>
+            <td>
+                <form th:method="PATCH" th:action="@{/admin/makeadmin/{id}(id=${person.getId()})}">
+                    <div th:if="${person.getRole().equals('ROLE_USER')}">
+                        <input type="submit" value="Make admin"/>
+                    </div>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>

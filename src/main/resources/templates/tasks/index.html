@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/auth/logout}" th:method="POST">
+    <input type="submit" value="Logout" />
+</form>
+
+<div th:if="${person.getRole().equals('ROLE_ADMIN')}">
+    <a href="/admin/listOfUsers">Show all users</a>
+</div>
+
+<a href="/tasks/create">Create new task</a>
+<br/>
+<hr/>
+
+<table>
+    <thead>
+    <tr>
+        <th> Is Done </th>
+        <th> Task </th>
+        <th> Rename </th>
+        <th> Delete </th>
+        <th> Change state </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="task : ${tasks}" >
+        <td>
+            <div th:if="${task.isDone()}">
+                <img src="/img/done.png" alt="done" height="16" width="16"/>
+            </div>
+            <div th:unless="${task.isDone()}">
+                <img src="/img/notDone.png" alt="not done" height="16" width="16"/>
+            </div>
+        </td>
+        <td><a th:href="@{/tasks/{id}(id=${task.getId()})}" th:text="${task.getText()}">task</a></td>
+
+        <td><a th:href="@{/tasks/{id}/edit(id=${task.getId()})}">Rename</a></td>
+
+        <td>
+            <form th:method="DELETE" th:action="@{/tasks/{id}(id=${task.getId()})}">
+                <input type="submit" value="Delete"/>
+            </form>
+        </td>
+
+        <td>
+            <form th:method="PATCH" th:action="@{/tasks/{id}/change(id=${task.getId()})}">
+                <div th:if="${task.isDone()}">
+                    <input type="submit" value="Mark as not done"/>
+                </div>
+                <div th:unless="${task.isDone()}">
+                    <input type="submit" value="Mark as done"/>
+                </div>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
